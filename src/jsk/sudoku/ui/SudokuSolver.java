@@ -37,8 +37,13 @@ public class SudokuSolver extends JFrame {
 	private boolean buttons;
 	
 	public SudokuSolver(final Board board) {
+		this(board, false);
+	}
+	
+	SudokuSolver(final Board board, boolean buttons) {
 		super("Sudoku Solver");
 		this.board = board;
+		this.buttons = buttons;
 		populate();
 	}
 	
@@ -97,7 +102,7 @@ public class SudokuSolver extends JFrame {
 					Board solution = guesser.awaitNextResult(30, SECONDS);
 					if (solution == null)
 						continue;
-					SudokuSolver solver = new SudokuSolver(solution);
+					SudokuSolver solver = new SudokuSolver(solution, buttons);
 					solver.setDefaultCloseOperation(DISPOSE_ON_CLOSE);
 					solver.pack();
 					solver.setVisible(true);
