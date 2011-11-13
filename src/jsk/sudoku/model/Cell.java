@@ -11,6 +11,7 @@ public final class Cell {
 	
 	Cell(Cell cell) {
 		possibilities = new Possibilities(cell.possibilities);
+		value = cell.value;
 	}
 	
 	Cell(int possibilities) {
@@ -68,6 +69,9 @@ public final class Cell {
 	
 	public void addListener(CellListener listener) {
 		listeners.add(listener);
+		if (isSolved()) {
+			listener.solved(this);
+		}
 	}
 	
 	// TODO Eliminate or Improve
