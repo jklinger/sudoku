@@ -1,7 +1,5 @@
 package jsk.sudoku.ui;
 
-import static java.util.concurrent.TimeUnit.SECONDS;
-
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 
@@ -11,6 +9,7 @@ import javax.swing.JFrame;
 import javax.swing.JMenu;
 import javax.swing.JMenuBar;
 import javax.swing.JRadioButtonMenuItem;
+import javax.swing.SwingUtilities;
 
 import jsk.sudoku.model.Board;
 import jsk.sudoku.model.GuessAndCheckSolver;
@@ -87,7 +86,7 @@ public class SudokuSolver extends JFrame {
 		return this;
 	}
 	
-	private class GuessAndCheck extends AbstractAction {
+	private class GuessAndCheck extends AbstractAction implements GuessAndCheckSolver.Listener {
 		private static final long serialVersionUID = 2630976927940138384L;
 
 		private GuessAndCheck(String name) {
@@ -96,20 +95,16 @@ public class SudokuSolver extends JFrame {
 		
 		@Override
 		public void actionPerformed(ActionEvent event) {
-			try {
-				GuessAndCheckSolver guesser = new GuessAndCheckSolver(board);
-				while (!guesser.isDone()) {
-					Board solution = guesser.awaitNextResult(30, SECONDS);
-					if (solution == null)
-						continue;
-					SudokuSolver solver = new SudokuSolver(solution, buttons);
-					solver.setDefaultCloseOperation(DISPOSE_ON_CLOSE);
-					solver.pack();
-					solver.setVisible(true);
-				}
-			} catch (InterruptedException e) {
-				// Too much waiting!
-			}
+			GuessAndCheckSolver guesser = new GuessAndCheckSolver(board);
+			guesser.registerListener(this);
+			SwingUtilities.invokeLater(guesser);
+		}
+
+		public void solved(Board solution) {
+			SudokuSolver solver = new SudokuSolver(solution, buttons);
+			solver.setDefaultCloseOperation(DISPOSE_ON_CLOSE);
+			solver.pack();
+			solver.setVisible(true);
 		}
 	}
 }
