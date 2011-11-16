@@ -1,14 +1,18 @@
 package jsk.sudoku.model;
 
 import static java.util.Collections.unmodifiableSet;
+import static java.util.concurrent.TimeUnit.SECONDS;
 
 import java.util.Set;
 import java.util.concurrent.CopyOnWriteArraySet;
 import java.util.concurrent.ExecutionException;
 import java.util.concurrent.Executor;
-import java.util.concurrent.Executors;
 import java.util.concurrent.FutureTask;
 import java.util.concurrent.RejectedExecutionException;
+import java.util.concurrent.SynchronousQueue;
+import java.util.concurrent.ThreadFactory;
+import java.util.concurrent.ThreadPoolExecutor;
+import java.util.concurrent.atomic.AtomicInteger;
 
 public class GuessAndCheckSolver implements Runnable {
 	private final Board originalBoard;
@@ -54,13 +58,24 @@ public class GuessAndCheckSolver implements Runnable {
 		}
 	}
 	
-	public GuessAndCheckSolver(Board board, Executor executor) {
-		this.executor = executor;
-		originalBoard = board;
-	}
-	
 	public GuessAndCheckSolver(Board board) {
-		this(board, Executors.newCachedThreadPool());
+		executor = new ThreadPoolExecutor(
+				2, // At least 2 threads
+				board.type.size ^ 2, // No more threads than cells
+				15, SECONDS,
+				new SynchronousQueue<Runnable>(),
+				new ThreadFactory() {
+					private final ThreadGroup solverGroup = new ThreadGroup("Guess-and-Check Solvers");
+					private final AtomicInteger threadNumber = new AtomicInteger(0);
+					@Override
+					public Thread newThread(Runnable task) {
+						Thread thread = new Thread(solverGroup, task, "Solver-" + threadNumber.getAndIncrement());
+						thread.setDaemon(true); // TODO Look into why the current thread isn't already a daemon
+						return thread;
+					}
+				}
+		);
+		originalBoard = board;
 	}
 	
 	public void run() {
