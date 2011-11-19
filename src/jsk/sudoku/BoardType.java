@@ -6,8 +6,9 @@ public enum BoardType {
 	STANDARD(3) {
 		public final int parseInternal(String input) throws ParseException {
 			int result = Integer.parseInt(input) - 1;
-			if (result > 9)
+			if (result > 9) {
 				throw new ParseException(input, 0);
+			}
 			return result;
 		}
 		public final String format(int value) {
@@ -16,8 +17,9 @@ public enum BoardType {
 	},
 	MINI(2) {
 		public final int parseInternal(String input) throws ParseException {
-			if (input.length() == 0)
+			if (input.length() == 0) {
 				throw new ParseException(input, 0);
+			}
 			
 			switch (input.charAt(0)) {
 			case 'a':
@@ -74,8 +76,9 @@ public enum BoardType {
 	
 	abstract int parseInternal(String input) throws ParseException;
 	public final int parse(String input) throws ParseException {
-		if (input == null || input.length() != 1)
+		if (input == null || input.length() != 1) {
 			throw new ParseException(input, 0);
+		}
 		
 		try {
 			return parseInternal(input);
@@ -83,5 +86,6 @@ public enum BoardType {
 			throw new ParseException(input, 0);
 		}
 	}
+
 	public abstract String format(int value);
 }

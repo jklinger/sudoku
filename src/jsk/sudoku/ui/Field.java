@@ -49,14 +49,17 @@ public class Field extends JTextField implements CellListener {
 
 		@Override
 		public void insertString(int offset, String string, AttributeSet a) throws BadLocationException {
-			if (string == null)
+			if (string == null) {
 				return;
+			}
 			
-			if (offset >= maxLength)
+			if (offset >= maxLength) {
 				return;
+			}
 			
-			if (offset + string.length() > maxLength)
+			if (offset + string.length() > maxLength) {
 				string = string.substring(0, maxLength - offset);
+			}
 			
 			try {
 				cell.solve(boardType.parse(string));

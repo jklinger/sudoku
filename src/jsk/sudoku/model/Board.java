@@ -89,13 +89,17 @@ public class Board implements CellListener {
 		}
 	}
 	private void setupListeners() {
-		for (CellBlock row : rows)
-			for (Cell cell : row)
+		for (CellBlock row : rows) {
+			for (Cell cell : row) {
 				cell.addListener(row);
+			}
+		}
 		
-		for (CellBlock column : columns)
-			for (Cell cell : column)
+		for (CellBlock column : columns) {
+			for (Cell cell : column) {
 				cell.addListener(column);
+			}
+		}
 		
 		for (CellBlock section : sections) {
 			for (Cell cell : section) {
@@ -129,14 +133,18 @@ public class Board implements CellListener {
 	public boolean equals(Object o) {
 		if (o instanceof Board) {
 			Board other = (Board) o;
-			if (other.type != type)
+			if (other.type != type) {
 				return false;
+			}
 			
 			int size = type.size;
-			for (int i = 0; i < size; ++i)
-				for (int j = 0; j < size; ++j)
-					if (!cells[i][j].getPossibilities().equals(other.cells[i][j].getPossibilities()))
+			for (int i = 0; i < size; ++i) {
+				for (int j = 0; j < size; ++j) {
+					if (!cells[i][j].getPossibilities().equals(other.cells[i][j].getPossibilities())) {
 						return false;
+					}
+				}
+			}
 			
 			return true;
 		} else {
@@ -148,9 +156,11 @@ public class Board implements CellListener {
 		int hash = type.ordinal();
 		int size = type.size;
 		hash ^= size;
-		for (int i = 0; i < size; ++i)
-			for (int j = 0; j < size; ++j)
+		for (int i = 0; i < size; ++i) {
+			for (int j = 0; j < size; ++j) {
 				hash += (7*i + 2*j) * cells[i][j].getPossibilities().hashCode();
+			}
+		}
 		
 		return hash;
 	}
@@ -159,18 +169,20 @@ public class Board implements CellListener {
 		Coordinate location = cheatSheet.get(changedCell);
 		CellBlock section = sections[location.section];
 		for (int value = 0; value < type.size; ++value) {
-			if (section.isSolved(value))
+			if (section.isSolved(value)) {
 				continue;
+			}
 			
 			Collection<CellBlock> sharedBlocks = new HashSet<CellBlock>(3);
 			for (Cell cell : section.cells) {
 				if (cell.couldBe(value)) {
 					Coordinate loc = cheatSheet.get(cell);
 					Collection<CellBlock> blocks = Arrays.asList(rows[loc.x], columns[loc.y], sections[loc.section]);
-					if (sharedBlocks.isEmpty())
+					if (sharedBlocks.isEmpty()) {
 						sharedBlocks.addAll(blocks);
-					else
+					} else {
 						sharedBlocks.retainAll(blocks);
+					}
 				}
 			}
 			
@@ -227,8 +239,9 @@ public class Board implements CellListener {
 			for (int x = 0, length = type.size; x < length; ++x) {
 				for (int y = 0; y < length; ++y) {
 					Cell cell = cells[x][y];
-					if (cell.isSolved())
+					if (cell.isSolved()) {
 						continue;
+					}
 					
 					for (int value : cell.getPossibilities()) {
 						Board branch = new Board(Board.this);

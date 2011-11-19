@@ -50,8 +50,9 @@ public final class Cell {
 	}
 	
 	public void mustBe(Possibilities possibilities) {
-		if (this.possibilities.retainAll(possibilities))
+		if (this.possibilities.retainAll(possibilities)) {
 			changed();
+		}
 	}
 	
 	public void mustBe(int... possibilities) {

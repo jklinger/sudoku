@@ -49,8 +49,9 @@ public class Possibilities implements Iterable<Integer> {
 	}
 	
 	public int value() {
-		if (size() != 1)
+		if (size() != 1) {
 			throw new IllegalStateException();
+		}
 		
 		return Integer.numberOfTrailingZeros(elements);
 	}
@@ -61,12 +62,14 @@ public class Possibilities implements Iterable<Integer> {
 	
 	public String toString() {
 		int size = size();
-		if (size == 1)
+		if (size == 1) {
 			return '<' + Integer.toString(value()) + '>';
+		}
 		
 		StringBuilder sb = new StringBuilder(size * 2);
-		for (Integer value : this)
+		for (Integer value : this) {
 			sb.append(' ').append(value.intValue());
+		}
 		return sb.substring(1);
 	}
 	
@@ -108,8 +111,9 @@ public class Possibilities implements Iterable<Integer> {
 		}
 
 		public Integer next() {
-			if (unseen == 0)
+			if (unseen == 0) {
 				throw new NoSuchElementException();
+			}
 			
 			lastReturned = unseen & -unseen;
 			unseen -= lastReturned;
@@ -117,8 +121,9 @@ public class Possibilities implements Iterable<Integer> {
 		}
 
 		public void remove() {
-			if (lastReturned == 0)
+			if (lastReturned == 0) {
 				throw new IllegalStateException();
+			}
 			elements -= lastReturned;
 			lastReturned = 0;
 		}

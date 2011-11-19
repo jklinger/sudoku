@@ -35,8 +35,9 @@ public class CellBlock implements Iterable<Cell>, CellListener {
 		int value = solved.getValue();
 		this.solved[value] = true;
 		for (Cell cell : cells) {
-			if (cell != solved)
+			if (cell != solved) {
 				cell.eliminate(value);
+			}
 		}
 	}
 	
@@ -46,21 +47,24 @@ public class CellBlock implements Iterable<Cell>, CellListener {
 
 	public void cellChanged(Cell changedCell) {
 		CHECKING_VALUES: for (int value = 0; value < solved.length; value++) {
-			if (isSolved(value))
+			if (isSolved(value)) {
 				continue;
+			}
 			
 			Cell onlyCell = null;
 			for (Cell cell : cells) {
 				if (cell.couldBe(value)) {
-					if (onlyCell == null)
+					if (onlyCell == null) {
 						onlyCell = cell;
-					else
+					} else {
 						continue CHECKING_VALUES;
+					}
 				}
 			}
 			
-			if (onlyCell != null)
+			if (onlyCell != null) {
 				onlyCell.solve(value);
+			}
 		}
 	
 		// TODO Why doesn't this have any effect?
@@ -70,8 +74,9 @@ public class CellBlock implements Iterable<Cell>, CellListener {
 	void mutexRule() {
 		Possibilities[] possibilities = new Possibilities[solved.length];
 		for (int value = 0; value < solved.length; value++) {
-			if (isSolved(value))
+			if (isSolved(value)) {
 				continue;
+			}
 			
 			possibilities[value] = new Possibilities(possibilities.length);
 			for (int i = 0; i < cells.size(); i++) {
