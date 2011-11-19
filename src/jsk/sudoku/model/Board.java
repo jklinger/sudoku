@@ -49,7 +49,6 @@ public class Board implements CellListener {
 		}
 		fillBlocks(type);
 		setupListeners();
-		solved = board.solved;
 	}
 	
 	/**
