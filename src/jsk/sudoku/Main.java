@@ -29,24 +29,24 @@ import javax.swing.UnsupportedLookAndFeelException;
 import jsk.sudoku.model.Board;
 import jsk.sudoku.ui.SudokuSolver;
 
+/**
+ * The entry point to the program, Main sets the system look and feel
+ * and creates a new standard sudoku solver on the AWT event dispatching thread.
+ */
 public class Main implements Runnable {
 	
 	/**
-	 * @param args
+	 * @param args unused program arguments
 	 * @throws UnsupportedLookAndFeelException 
 	 * @throws IllegalAccessException 
 	 * @throws InstantiationException 
 	 * @throws ClassNotFoundException 
 	 */
 	public static void main(String[] args) throws ClassNotFoundException, InstantiationException, IllegalAccessException, UnsupportedLookAndFeelException {
-        setupLookAndFeel();
+		setLookAndFeel(getSystemLookAndFeelClassName());
 		invokeLater(new Main());
 	}
 	
-	private static void setupLookAndFeel() throws ClassNotFoundException, InstantiationException, IllegalAccessException, UnsupportedLookAndFeelException {
-		setLookAndFeel(getSystemLookAndFeelClassName());
-	}
-
 	public void run() {
 		SudokuSolver window = new SudokuSolver(new Board(BoardType.STANDARD));
 		window.setDefaultCloseOperation(DISPOSE_ON_CLOSE);
