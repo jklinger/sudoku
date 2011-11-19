@@ -32,9 +32,6 @@ public class BoardPane extends JPanel {
 			panel.add((JComponent) field);
 			
 			cell.addListener(field);
-			if (cell.isSolved()) {
-				field.solved(cell);
-			}
 		}
 
 		return panel;
