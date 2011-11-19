@@ -10,10 +10,6 @@ import javax.swing.UnsupportedLookAndFeelException;
 import jsk.sudoku.model.Board;
 import jsk.sudoku.ui.SudokuSolver;
 
-import org.apache.log4j.ConsoleAppender;
-import org.apache.log4j.Logger;
-import org.apache.log4j.PatternLayout;
-
 public class Main implements Runnable {
 	
 	/**
@@ -24,7 +20,6 @@ public class Main implements Runnable {
 	 * @throws ClassNotFoundException 
 	 */
 	public static void main(String[] args) throws ClassNotFoundException, InstantiationException, IllegalAccessException, UnsupportedLookAndFeelException {
-		Logger.getRootLogger().addAppender(new ConsoleAppender(new PatternLayout("%d{ABSOLUTE} %-5c %m%n")));
         setupLookAndFeel();
 		invokeLater(new Main());
 	}
