@@ -16,11 +16,6 @@ public class CellBlock implements Iterable<Cell>, CellListener {
 		solved = new boolean[size];
 	}
 	
-	public CellBlock(CellBlock copy) {
-		cells = new ArrayList<Cell>(copy.cells);
-		solved = copy.solved.clone();
-	}
-
 	CellBlock add(Cell cell) {
 		cells.add(cell);
 		return this;
