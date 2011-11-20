@@ -45,8 +45,10 @@ public class ButtonField extends JPanel implements CellListener {
 		
 		setBorder(BorderFactory.createLineBorder(Color.BLACK));
 		
+		Possibilities poss = cell.getPossibilities();
 		for (int value : values) {
 			JButton button = new JButton(type.format(value));
+			button.setEnabled(poss.contains(value));
 			button.addActionListener(new Listen(cell, value));
 			add(button);
 		}
