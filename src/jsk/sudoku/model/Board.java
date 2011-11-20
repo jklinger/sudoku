@@ -38,36 +38,30 @@ public class Board implements CellListener {
 	
 	/**
 	 * Creates a deep copy of an existing board
-	 * @param board
+	 * @param board the board to copy
 	 */
 	public Board(Board board) {
-		this(board.type, board.cells.clone());
-		for (int i = 0; i < type.size; ++i) {
-			for (int j = 0; j < type.size; ++j) {
-				cells[i][j] = new Cell(cells[i][j]);
+		this(board.type);
+		
+		for (int x = 0; x < type.size; ++x) {
+			for (int y = 0; y < type.size; ++y) {
+				if (board.cells[x][y].isSolved()) {
+					cells[x][y].solve(board.cells[x][y].getValue());
+				}
 			}
 		}
-		fillBlocks(type);
-		setupListeners();
 	}
 	
-	/**
-	 * Constructs a new empty board
-	 * @param baseDimension
-	 */
 	public Board(BoardType type) {
-		this(type, newCellArray(type.size));
-		fillBlocks(type);
-		setupListeners();
-	}
-	
-	private Board(BoardType type, Cell[][] cells) {
 		this.type = type;
-		this.cells = cells;
+		this.cells = newCellArray(type.size);
 		columns = newBlockArray(type.size);
 		rows = newBlockArray(type.size);
 		sections = newBlockArray(type.size);
 		cheatSheet = new IdentityHashMap<Cell, Board.Coordinate>(type.size * type.size);
+		
+		fillBlocks(type);
+		setupListeners();
 	}
 
 	private void fillBlocks(BoardType type) {
