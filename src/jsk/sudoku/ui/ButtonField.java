@@ -30,8 +30,13 @@ public class ButtonField extends JPanel implements CellListener {
 			this.value = value;
 		}
 		@Override
-		public void actionPerformed(ActionEvent e) {
-			cell.solve(value);
+		public void actionPerformed(ActionEvent event) {
+			try {
+				cell.solve(value);
+			} catch (Exception e) {
+				// TODO Real error handling
+				new Alert("Error", "BAD!");
+			}
 		}
 	}
 
@@ -56,6 +61,11 @@ public class ButtonField extends JPanel implements CellListener {
 
 	@Override
 	public void cellChanged(Cell cell) {
+		if (cell.isSolved()) {
+			solved(cell);
+			return;
+		}
+		
 		Possibilities poss = cell.getPossibilities();
 		Component[] buttons = getComponents();
 		for (int value : values) {
@@ -65,7 +75,6 @@ public class ButtonField extends JPanel implements CellListener {
 
 	@Override
 	public void solved(Cell cell) {
-//		cellChanged(cell);
 		removeAll();
 		GridLayout layout = (GridLayout) getLayout();
 		layout.setColumns(1);
