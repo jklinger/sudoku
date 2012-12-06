@@ -12,6 +12,7 @@ import javax.swing.JRadioButtonMenuItem;
 import javax.swing.SwingUtilities;
 
 import jsk.sudoku.model.Board;
+import jsk.sudoku.model.Cell;
 import jsk.sudoku.model.GuessAndCheckSolver;
 
 public class SudokuSolver extends JFrame {
@@ -56,6 +57,8 @@ public class SudokuSolver extends JFrame {
 		boardMenu.add(persistence.load);
 		boardMenu.add(persistence.save);
 		
+		boardMenu.add(history);
+		
 		boardMenu.add(new GuessAndCheck("Check it"));
 		
 		JMenu viewMenu = new JMenu("Interface");
@@ -81,9 +84,30 @@ public class SudokuSolver extends JFrame {
 	}
 	
 	public SudokuSolver setBoard(Board board) {
-		setContentPane(new BoardPane(this.board = board, buttons));
-		pack();
+		setBoard(board, false);
 		return this;
+	}
+	
+	
+	// TODO refactor all this into an actual controller class
+	private final History history = new History("History", this);
+	protected void solve(Cell cell, int value) {
+		// FIXME do this on a different thread!
+		history.record(board);
+		try {
+			cell.solve(value);
+		} catch (Exception e) {
+			Alert.show("Error", "The value " + getBoard().type.format(value) + " caused some cell to become invalid. This action has been undone.", false, this);
+			history.undo();
+		}
+	}
+	
+	protected void setBoard(Board board, boolean retainHistory) {
+		setContentPane(new BoardPane(this, this.board = board, buttons));
+		pack();
+		if (!retainHistory) {
+			history.clear();
+		}
 	}
 	
 	private class GuessAndCheck extends AbstractAction implements GuessAndCheckSolver.Listener {

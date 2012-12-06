@@ -23,25 +23,22 @@ public class ButtonField extends JPanel implements CellListener {
 	private int[] values;
 	
 	private static class Listen implements ActionListener {
+		private final SudokuSolver owner;
 		private final Cell cell;
 		private final int value;
-		private Listen(Cell cell, int value) {
+		private Listen(SudokuSolver owner, Cell cell, int value) {
+			this.owner = owner;
 			this.cell = cell;
 			this.value = value;
 		}
 		@Override
 		public void actionPerformed(ActionEvent event) {
-			try {
-				cell.solve(value);
-			} catch (Exception e) {
-				// TODO Real error handling
-				new Alert("Error", "BAD!");
-			}
+			owner.solve(cell, value);
 		}
 	}
 
 	
-	public ButtonField(BoardType type, Cell cell) {
+	public ButtonField(SudokuSolver owner, BoardType type, Cell cell) {
 		super(new GridLayout(type.baseDimension, type.baseDimension, 1, 1));
 		
 		this.type = type;
@@ -54,7 +51,7 @@ public class ButtonField extends JPanel implements CellListener {
 		for (int value : values) {
 			JButton button = new JButton(type.format(value));
 			button.setEnabled(poss.contains(value));
-			button.addActionListener(new Listen(cell, value));
+			button.addActionListener(new Listen(owner, cell, value));
 			add(button);
 		}
 	}

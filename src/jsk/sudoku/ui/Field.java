@@ -1,6 +1,7 @@
 package jsk.sudoku.ui;
 
 import java.awt.Dimension;
+import java.text.ParseException;
 
 import javax.swing.JTextField;
 import javax.swing.text.AttributeSet;
@@ -13,9 +14,11 @@ import jsk.sudoku.model.CellListener;
 
 public class Field extends JTextField implements CellListener {
 	private static final long serialVersionUID = 4399655095180580380L;
+	private final SudokuSolver owner;
 
-	public Field(Cell cell, BoardType boardType, int maxLength) {
+	public Field(SudokuSolver owner, Cell cell, BoardType boardType, int maxLength) {
 		super();
+		this.owner = owner;
 		setDocument(new DocModel(cell, boardType, maxLength));
 		setHorizontalAlignment(JTextField.CENTER);
 	}
@@ -61,12 +64,14 @@ public class Field extends JTextField implements CellListener {
 				string = string.substring(0, maxLength - offset);
 			}
 			
+			int value;
 			try {
-				cell.solve(boardType.parse(string));
-			} catch (Exception e) {
-				new Alert("BAD", "NO");
+				value = boardType.parse(string);
+			} catch (ParseException e) {
+				new Alert("Error", "Invalid value: " + e.getMessage());
 				return;
 			}
+			owner.solve(cell, value);
 		}
 
 		@Override
