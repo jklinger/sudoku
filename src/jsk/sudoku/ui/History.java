@@ -21,7 +21,7 @@ public class History extends JMenu {
 	private static final Logger log = Logger.getLogger(History.class);
 	
 	private final List<byte[]> history = new ArrayList<byte[]>();
-	private int historyIndex = -1;
+	private int historyIndex = 0;
 	private final Action undo = new Action("Undo", -1);
 	private final Action redo = new Action("Redo", 1);
 	private final SudokuSolver owner;
@@ -53,8 +53,8 @@ public class History extends JMenu {
 	}
 	
 	public void invalidateNewer() {
-		if (historyIndex != history.size() - 1) {
-			history.subList(historyIndex + 1, history.size()).clear();
+		if (historyIndex != history.size()) {
+			history.subList(historyIndex, history.size()).clear();
 		}
 	}
 	
