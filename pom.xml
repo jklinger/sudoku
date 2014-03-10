@@ -15,6 +15,30 @@
 					<target>1.6</target>
 				</configuration>
 			</plugin>
+			<plugin>
+				<groupId>org.apache.maven.plugins</groupId>
+				<artifactId>maven-assembly-plugin</artifactId>
+				<executions>
+					<execution>
+						<id>make-assembly</id>
+						<phase>package</phase>
+						<goals>
+							<goal>single</goal>
+						</goals>
+						<configuration>
+							<descriptorId>jar-with-dependencies</descriptorId>
+							<finalName>sudoku</finalName>
+							<appendAssemblyId>false</appendAssemblyId>
+							<attach>false</attach>
+							<archive>
+								<manifest>
+									<mainClass>jsk.sudoku.Main</mainClass>
+								</manifest>
+							</archive>
+						</configuration>
+					</execution>
+				</executions>
+			</plugin>
 		</plugins>
 	</build>
 	<dependencies>
