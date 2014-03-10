@@ -25,7 +25,7 @@ public class SudokuSolver extends JFrame {
 		@Override
 		public void actionPerformed(ActionEvent e) {
 			buttons = value;
-			setBoard(board);
+			setBoard(board, true);
 		}
 
 	}
