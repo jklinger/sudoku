@@ -23,7 +23,7 @@ public class History extends JMenu {
 	private final List<byte[]> history = new ArrayList<byte[]>();
 	private int historyIndex = 0;
 	private final Action undo = new Action("Undo", -1);
-	private final Action redo = new Action("Redo", 1);
+	private final Action redo = new Action("Redo", +1);
 	private final SudokuSolver owner;
 	
 	public History(String name, SudokuSolver owner) {
@@ -49,6 +49,7 @@ public class History extends JMenu {
 	
 	public void clear() {
 		history.clear();
+		historyIndex = 0;
 		updateEnabled();
 	}
 	
